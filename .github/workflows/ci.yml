@@ -6,22 +6,34 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v3
-        with:
-          python-version: "3.10"
-      - name: Install pipenv
-        run: pip install pipenv
-      - name: Install deps
-        run: |
-          pipenv shell
-          pipenv install --dev
+#     steps:
+#       - uses: actions/checkout@v3
+#       - name: Set up Python 3.10
+#         uses: actions/setup-python@v3
+#         with:
+#           python-version: "3.10"
+#       - name: Install pipenv
+#         run: pip install pipenv
+#       - name: Install deps
+#         run: |
+#           pipenv shell
+#           pipenv install --dev
           
-      - name: Run linter
-        run: flake8 ./
-      - name: Run formatters
-        run: run black --check ./ && isort --check-only ./
-        
+#       - name: Run linter
+#         run: flake8 ./
+#       - name: Run formatters
+#         run: run black --check ./ && isort --check-only ./
+
+    steps:
+    - uses: actions/checkout@v2 # Checking out the repo
+
+    - name: Install dependecies
+      uses: VaultVulp/action-pipenv@v2.0.1
+      with:
+        command: install -d # Install all dependencies, including development ones
+    
+    - name: Test
+      uses: VaultVulp/action-pipenv@v2.0.1
+      with:
+        command: run black ./       
           
