@@ -36,7 +36,5 @@ jobs:
       uses: VaultVulp/action-pipenv@v2.0.1
       with:
         command: |
-          run flake8 ./
-          run black --check ./ 
-          run isort --check-only ./
+          run flake8 ./ && black --check ./ && isort --check-only ./
           
