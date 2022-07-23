@@ -37,5 +37,5 @@ jobs:
       with:
         command: |
           run flake8 ./
-          run black --check ./ && isort --check-only ./
+          black --check ./ && isort --check-only ./
           
