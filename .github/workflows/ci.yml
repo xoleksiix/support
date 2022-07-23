@@ -15,10 +15,10 @@ jobs:
       - name: Install pipenv
         run: pip install pipenv
       - name: Install deps
-        run: pipenv install --dev
+        run: pipenv install --dev 
       - name: Run linter
-        run: flake8 ./
+        run: run flake8 ./
       - name: Run formatters
-        run: black --check ./ && isort --check-only ./
+        run: run black --check ./ && isort --check-only ./
         
           
