@@ -35,6 +35,15 @@ jobs:
     - name: Run linter & formatters
       uses: VaultVulp/action-pipenv@v2.0.1
       with:
-        command: |
-          run flake8 ./ && black --check ./ && isort --check-only ./
+        command: run flake8 ./
+        
+    - name: Run linter & formatters
+      uses: VaultVulp/action-pipenv@v2.0.1
+      with:
+        command: run black --check
+        
+    - name: Run linter & formatters
+      uses: VaultVulp/action-pipenv@v2.0.1
+      with:
+        command: run isort --check-only ./
           
