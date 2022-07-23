@@ -32,18 +32,18 @@ jobs:
       with:
         command: install -d # Install all dependencies, including development ones
     
-    - name: Run linter & formatters
+    - name: Run flake8
       uses: VaultVulp/action-pipenv@v2.0.1
       with:
         command: run flake8 ./
         
-    - name: Run linter & formatters
+    - name: Run black
       uses: VaultVulp/action-pipenv@v2.0.1
       with:
-        command: run black ./
+        command: run black --check ./
         
-    - name: Run linter & formatters
+    - name: Run isort
       uses: VaultVulp/action-pipenv@v2.0.1
       with:
-        command: run isort ./
+        command: run isort --check-only ./
           
