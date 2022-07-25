@@ -55,7 +55,7 @@ class ExchangeRatesHistory:
         return {"results": cls.read_data()}
 
     @classmethod
-    def add(cls, instance) -> None:
+    def add(cls, instance: ExchangeRate) -> None:
         """We woud like to add ExchangeRates instances if it is not last duplicated"""
         history = cls.read_data()
 
