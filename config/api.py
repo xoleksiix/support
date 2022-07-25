@@ -55,14 +55,14 @@ class ExchangeRatesHistory:
         return {"results": cls.read_data()}
 
     @classmethod
-    def add(cls, instance: dict) -> None:
+    def add(cls, instance) -> None:
         """We woud like to add ExchangeRates instances if it is not last duplicated"""
         history = cls.read_data()
 
         if not history:
-            history.append(instance)
-        elif float(history[-1]["value"]) != float(instance["value"]):
-            history.append(instance)
+            history.append(asdict(instance))
+        elif float(history[-1]["value"]) != instance.value:
+            history.append(asdict(instance))
         cls.write_data(history)
 
 
@@ -76,7 +76,7 @@ def btc_usd(request):
     response = requests.get(url)
 
     exchange_rate = ExchangeRate.from_response(response)
-    ExchangeRatesHistory.add(asdict(exchange_rate))
+    ExchangeRatesHistory.add(exchange_rate)
 
     return JsonResponse(asdict(exchange_rate))
 
