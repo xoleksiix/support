@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Local apps
     "core",
+    "authentication",
 ]
 
 MIDDLEWARE = [
@@ -62,7 +63,7 @@ DATABASES = {
 }
 
 
-AUTH_USER_MODEL = "core.User"
+AUTH_USER_MODEL = "authentication.User"
 
 
 # Password validation
