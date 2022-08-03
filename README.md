@@ -3,7 +3,6 @@
 # Support service.
 
 
-
 ### Setup the environment
 
 #### Install dependencies with Pipenv & activate virtual environment
@@ -15,6 +14,11 @@ pip install --user pipenv
 # Install dependencies
 pipenv shell
 pipenv install -d
+```
+#### Install [pre-commit hooks](https://pre-commit.com/#install)
+> Note: Install pre-commit tool before
+```bash
+pre-commit install
 ```
 # Files and  folders
 
@@ -59,7 +63,7 @@ pipenv install -d
 ### Pipfile.lock 
 - intended to specify, based on the packages present in Pipfile, which specific version of those should be used, avoiding the risks of automatically upgrading packages that depend upon each other and breaking your project dependency tree.
 ### pyproject.toml 
-- configuration file for isort & black to work without conflicts.
+- configuration file (now uses for isort & black to work without conflicts).
 ### manage.py
 - tool for executing many Django-specific tasks — starting a new app within a project, running the development server, running tests/etc.
 
