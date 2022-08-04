@@ -42,6 +42,9 @@ class Role(TimeStampMixin):
 
     name = models.CharField(max_length=50)
 
+    def __str__(self) -> str:
+        return self.name
+
 
 class User(AbstractBaseUser, PermissionsMixin, TimeStampMixin):
     """This is my custom user model."""
@@ -58,7 +61,11 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampMixin):
     is_superuser = models.BooleanField(default=False)
 
     role = models.ForeignKey(
-        Role, null=True, default=DEFAULT_ROLES["user"], on_delete=models.SET_NULL, related_name="users"
+        "Role",
+        null=True,
+        default=DEFAULT_ROLES["user"],
+        on_delete=models.SET_NULL,
+        related_name="users",
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
