@@ -6,6 +6,7 @@ from .models import Comment, Ticket
 @admin.register(Ticket)
 class TicketAdmin(admin.ModelAdmin):
     list_display = ["id", "operator", "client", "theme"]
+    list_filter = ["operator"]
 
 
 @admin.register(Comment)
