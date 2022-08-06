@@ -6,7 +6,7 @@ from shared.django.models import TimeStampMixin
 
 class Ticket(TimeStampMixin):
     theme = models.CharField(max_length=255)
-    text = models.TextField()
+    description = models.TextField()
     resolved = models.BooleanField(default=False)
     client = models.ForeignKey(
         settings.AUTH_USER_MODEL,
