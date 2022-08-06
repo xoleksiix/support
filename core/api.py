@@ -33,8 +33,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class TicketSerializer(serializers.ModelSerializer):
-    client = UserSerializer()
     operator = UserSerializer()
+    client = UserSerializer()
 
     class Meta:
         model = Ticket
