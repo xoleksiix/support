@@ -48,8 +48,44 @@ class TicketSerializer(serializers.ModelSerializer):
         ]
 
 
+# class RoleLightSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Role
+#         fields = ["id", "name"]
+
+
+# class UserLightSerializer(serializers.ModelSerializer):
+#     role = RoleLightSerializer()
+
+#     class Meta:
+#         model = User
+#         fields = ["id", "username", "email", "role"]
+
+
+class TicketLightSerializer(serializers.ModelSerializer):
+    # operator = UserLightSerializer()
+    # client = UserLightSerializer()
+
+    class Meta:
+        model = Ticket
+        fields = [
+            "id",
+            "operator",
+            "client",
+            "theme",
+            "resolved",
+        ]
+
+
 @api_view(["GET"])
 def get_all_tickets(request):
     tickets = Ticket.objects.all()
-    data = TicketSerializer(tickets, many=True).data
-    return Response(data)
+    data = TicketLightSerializer(tickets, many=True).data
+    return Response(data=data)
+
+
+@api_view(["GET"])
+def get_ticket(request, id_: int):
+    tickets = Ticket.objects.get(id=id_)
+    data = TicketSerializer(tickets).data
+    return Response(data=data)
