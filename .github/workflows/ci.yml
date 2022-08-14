@@ -21,7 +21,7 @@ jobs:
         command: run flake8 ./
         
     - name: install plat
-      run: pip install platformdirs
+      run: pipenv install platformdirs
       
         
     - name: Run black
