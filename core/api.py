@@ -1,91 +1,44 @@
-from django.contrib.auth import get_user_model
-from rest_framework import serializers
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from authentication.models import Role
 from core.models import Ticket
-
-User = get_user_model()
-
-
-class RoleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Role
-        fields = ["id"]
+from core.serializers import TicketLightSerializer, TicketSerializer
 
 
-class UserSerializer(serializers.ModelSerializer):
-    role = RoleSerializer()
+@api_view(["GET", "POST"])
+def get_post_tickets(request):
+    if request.method == "GET":
+        tickets = Ticket.objects.all()
+        data = TicketLightSerializer(tickets, many=True).data
+        return Response(data=data)
 
-    class Meta:
-        model = User
-        fields = [
-            "id",
-            "role",
-            "email",
-            "username",
-            "first_name",
-            "last_name",
-            "age",
-            "phone",
-        ]
+    serializer = TicketSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
 
+    # ticket = Ticket.objects.create(**serializer.validated_data)
+    instance = serializer.create(serializer.validated_data)
+    results = TicketSerializer(instance).data
 
-class TicketSerializer(serializers.ModelSerializer):
-    operator = UserSerializer()
-    client = UserSerializer()
-
-    class Meta:
-        model = Ticket
-        fields = [
-            "id",
-            "operator",
-            "client",
-            "theme",
-            "description",
-            "resolved",
-        ]
+    return Response(data=results, status=status.HTTP_201_CREATED)
 
 
-# class RoleLightSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Role
-#         fields = ["id", "name"]
+@api_view(["GET", "PUT", "DELETE"])
+def retrieve_update_delete_ticket(request, id_: int):
+    instance = Ticket.objects.get(id=id_)
 
+    if request.method == "DELETE":
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
-# class UserLightSerializer(serializers.ModelSerializer):
-#     role = RoleLightSerializer()
+    elif request.method == "PUT":
+        serializer = TicketSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
-#     class Meta:
-#         model = User
-#         fields = ["id", "username", "email", "role"]
+        updated_instance = serializer.update(instance, serializer.validated_data)
+        results = TicketSerializer(updated_instance).data
+        return Response(data=results, status=status.HTTP_200_OK)
 
-
-class TicketLightSerializer(serializers.ModelSerializer):
-    # operator = UserLightSerializer()
-    # client = UserLightSerializer()
-
-    class Meta:
-        model = Ticket
-        fields = [
-            "id",
-            "operator",
-            "client",
-            "theme",
-            "resolved",
-        ]
-
-
-@api_view(["GET"])
-def get_all_tickets(request):
-    tickets = Ticket.objects.all()
-    data = TicketLightSerializer(tickets, many=True).data
-    return Response(data=data)
-
-
-@api_view(["GET"])
-def get_ticket(request, id_: int):
-    tickets = Ticket.objects.get(id=id_)
-    data = TicketSerializer(tickets).data
-    return Response(data=data)
+    else:
+        data = TicketSerializer(instance).data
+        return Response(data=data, status=status.HTTP_200_OK)
