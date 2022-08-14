@@ -12,7 +12,7 @@ jobs:
     - name: Install dependecies
       uses: VaultVulp/action-pipenv@v2.0.1
       with:
-        command: install && pipenv shell # Install all dependencies, including development ones
+        command: install -d # Install all dependencies, including development ones
     
     - name: Run flake8
       uses: VaultVulp/action-pipenv@v2.0.1
