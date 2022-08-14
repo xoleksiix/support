@@ -13,11 +13,16 @@ jobs:
       uses: VaultVulp/action-pipenv@v2.0.1
       with:
         command: install -d # Install all dependencies, including development ones
+
     
     - name: Run flake8
       uses: VaultVulp/action-pipenv@v2.0.1
       with:
         command: run flake8 ./
+        
+    - name: install plat
+      run: pip install platformdirs
+      
         
     - name: Run black
       uses: VaultVulp/action-pipenv@v2.0.1
