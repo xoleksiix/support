@@ -46,10 +46,4 @@ class TicketSerializer(serializers.ModelSerializer):
 class TicketLightSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
-        fields = [
-            "id",
-            "operator",
-            "client",
-            "theme",
-            "resolved",
-        ]
+        fields = ["id", "operator", "client", "theme", "resolved"]
