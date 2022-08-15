@@ -34,6 +34,7 @@ def retrieve_update_delete_ticket(request, id_: int):
     elif request.method == "PUT":
         serializer = TicketSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+
         updated_instance = serializer.update(instance, serializer.validated_data)
         results = TicketSerializer(updated_instance).data
         return Response(data=results, status=status.HTTP_200_OK)
