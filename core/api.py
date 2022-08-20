@@ -16,8 +16,7 @@ def get_post_tickets(request):
     serializer = TicketSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
 
-    # ticket = Ticket.objects.create(**serializer.validated_data)
-    instance = serializer.create(serializer.validated_data)
+    instance: Ticket = serializer.create(serializer.validated_data)
     results = TicketSerializer(instance).data
 
     return Response(data=results, status=status.HTTP_201_CREATED)
@@ -25,7 +24,7 @@ def get_post_tickets(request):
 
 @api_view(["GET", "PUT", "DELETE"])
 def retrieve_update_delete_ticket(request, id_: int):
-    instance = Ticket.objects.get(id=id_)
+    instance: Ticket = Ticket.objects.get(id=id_)
 
     if request.method == "DELETE":
         instance.delete()
