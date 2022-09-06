@@ -57,12 +57,13 @@ class TicketSerializer(serializers.ModelSerializer):
 
         # data = Ticket.objects.filter(...).filter(...).get().values()
         # data = Ticket.objects.only("theme")
-        data = Ticket.objects.values("theme")
+        data = Ticket.objects.values_list("theme")
 
         for element in chain.from_iterable(data):
             if element == theme:
                 raise ValueError("This ticket is already in the database")
 
+        attrs["client"] = self.context["request"].user
         return attrs
 
 
