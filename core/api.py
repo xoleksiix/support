@@ -1,34 +1,28 @@
-from rest_framework.generics import (
-    CreateAPIView,
-    ListAPIView,
-    RetrieveUpdateDestroyAPIView,
-)
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated
 
 from core.models import Ticket
 from core.serializers import TicketLightSerializer, TicketSerializer
 
 
-class TicketsListAPI(ListAPIView):
-    serializer_class = TicketLightSerializer
+class TicketsAPI(ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Ticket.objects.all()
+
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            self.serializer_class = TicketSerializer
+        if self.request.method == "GET":
+            self.serializer_class = TicketLightSerializer
+        return super().get_serializer_class()
 
     def get_queryset(self):
         user = self.request.user
 
         if user.role.id == 1:
-            return Ticket.objects.all()
+            return Ticket.objects.filter(operator=None) | Ticket.objects.filter(operator=user)
 
         return Ticket.objects.filter(client=user)
-
-
-class TicketsCreateAPI(CreateAPIView):
-    serializer_class = TicketSerializer
-    queryset = Ticket.objects.all()
-    permission_classes = [IsAuthenticated]
-
-
-class TicketsAPI(TicketsListAPI, TicketsCreateAPI):
-    queryset = Ticket.objects.all()
 
 
 class TicketRetrieveAPI(RetrieveUpdateDestroyAPIView):
