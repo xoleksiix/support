@@ -1,20 +1,22 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.permissions import IsAuthenticated
 
 from core.models import Ticket
+from core.permissions import ClientOnly
 from core.serializers import TicketLightSerializer, TicketSerializer
 
 
 class TicketsAPI(ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = Ticket.objects.all()
-
     def get_serializer_class(self):
         if self.request.method == "POST":
             self.serializer_class = TicketSerializer
         if self.request.method == "GET":
             self.serializer_class = TicketLightSerializer
         return super().get_serializer_class()
+
+    def get_permissions(self):
+        if self.request.method == "POST":
+            self.permission_classes = [ClientOnly]
+        return super().get_permissions()
 
     def get_queryset(self):
         user = self.request.user
@@ -26,10 +28,16 @@ class TicketsAPI(ListCreateAPIView):
 
 
 class TicketRetrieveAPI(RetrieveUpdateDestroyAPIView):
-    queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
     lookup_field = "id"
     lookup_url_kwarg = "id"
+    permission_classes = [ClientOnly]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.role.id == 2:
+            return Ticket.objects.filter(client=user)
+        return Ticket.objects.filter(operator=user)
 
 
 # class TicketsListCreateAPI(ListCreateAPIView):
