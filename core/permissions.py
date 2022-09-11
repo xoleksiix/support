@@ -5,7 +5,4 @@ class ClientOnly(BasePermission):
     message = "Not allowed. ClientOnly."
 
     def has_permission(self, request, view) -> bool:
-        if request.user.role.id == 2:
-            return True
-
-        return False
+        return bool(request.user and request.user.is_authenticated and request.user.role.id == 2)
