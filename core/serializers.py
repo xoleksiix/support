@@ -78,3 +78,14 @@ class TicketLightSerializer(serializers.ModelSerializer):
             "theme",
             "resolved",
         ]
+
+
+class TicketAssingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ticket
+        fields = ["operator"]
+
+    def validate(self, attrs):
+        # NOTE: Add current user to the "attrs" object
+        attrs["operator"] = self.context["request"].user
+        return attrs
