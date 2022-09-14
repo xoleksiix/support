@@ -5,6 +5,7 @@ from rest_framework.generics import (
     RetrieveUpdateDestroyAPIView,
     UpdateAPIView,
 )
+from rest_framework.response import Response
 
 from authentication.models import DEFAULT_ROLES
 from core.models import Ticket
@@ -14,6 +15,7 @@ from core.serializers import (
     TicketLightSerializer,
     TicketSerializer,
 )
+from core.services import TicketsCRUD
 
 
 class TicketsAPI(ListCreateAPIView):
@@ -72,50 +74,22 @@ class TicketAssingAPI(UpdateAPIView):
         return Ticket.objects.filter(operator=None)
 
 
-# class TicketsListCreateAPI(ListCreateAPIView):
-#     serializer_class = TicketLightSerializer
-#     queryset = Ticket.objects.all()
-#     permission_classes = [IsAuthenticated]
+class TicketResolveAPI(UpdateAPIView):
+    http_method_names = ["patch"]
+    permission_classes = [OperatorOnly]
+    serializer_class = TicketLightSerializer
+    lookup_field = "id"
+    lookup_url_kwarg = "id"
 
-#     def get_permissions(self):
-#         if self.request.method == "POST":
-#             return [IsAuthenticated()]
-#         return []
+    def get_queryset(self):
+        user = self.request.user
+        return Ticket.objects.filter(operator=user)
 
-#     def get_serializer(self, *args, **kwargs):
-#         return TicketLightSerializer if self.request.method == "GET" else TicketSerializer
-# @api_view(["GET", "POST"])
-# def get_post_tickets(request):
-#     if request.method == "GET":
-#         tickets = Ticket.objects.all()
-#         data = TicketLightSerializer(tickets, many=True).data
-#         return Response(data=data)
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance = TicketsCRUD.change_resolved_status(instance)
 
-#     serializer = TicketSerializer(data=request.data)
-#     serializer.is_valid(raise_exception=True)
+        serializer = self.get_serializer(instance)
+        # serializer = self.serializer_class(instance)
 
-#     instance: Ticket = serializer.create(serializer.validated_data)
-#     results = TicketSerializer(instance).data
-
-#     return Response(data=results, status=status.HTTP_201_CREATED)
-
-
-# @api_view(["GET", "PUT", "DELETE"])
-# def retrieve_update_delete_ticket(request, id_: int):
-#     instance: Ticket = Ticket.objects.get(id=id_)
-
-#     if request.method == "DELETE":
-#         instance.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
-
-#     elif request.method == "PUT":
-#         serializer = TicketSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-
-#         updated_instance = serializer.update(instance, serializer.validated_data)
-#         results = TicketSerializer(updated_instance).data
-#         return Response(data=results, status=status.HTTP_200_OK)
-
-#     else:
-#         data = TicketSerializer(instance).data
-#         return Response(data=data, status=status.HTTP_200_OK)
+        return Response(serializer.data)
