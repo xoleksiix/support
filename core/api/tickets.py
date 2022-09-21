@@ -11,7 +11,7 @@ from authentication.models import DEFAULT_ROLES
 from core.models import Ticket
 from core.permissions import ClientOnly, OperatorOnly
 from core.serializers import (
-    TicketAssingSerializer,
+    TicketAssignSerializer,
     TicketLightSerializer,
     TicketSerializer,
 )
@@ -63,9 +63,9 @@ class TicketRetrieveAPI(RetrieveUpdateDestroyAPIView):
         return Ticket.objects.filter(operator=user)
 
 
-class TicketAssingAPI(UpdateAPIView):
+class TicketAssignAPI(UpdateAPIView):
     http_method_names = ["patch"]
-    serializer_class = TicketAssingSerializer
+    serializer_class = TicketAssignSerializer
     permission_classes = [OperatorOnly]
     lookup_field = "id"
     lookup_url_kwarg = "id"

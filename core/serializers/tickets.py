@@ -80,7 +80,7 @@ class TicketLightSerializer(serializers.ModelSerializer):
         ]
 
 
-class TicketAssingSerializer(serializers.ModelSerializer):
+class TicketAssignSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
         fields = ["operator"]

@@ -3,7 +3,7 @@ from django.urls import path
 from core.api import (
     CommentsCreateAPI,
     CommentsListAPI,
-    TicketAssingAPI,
+    TicketAssignAPI,
     TicketResolveAPI,
     TicketRetrieveAPI,
     TicketsAPI,
@@ -12,7 +12,7 @@ from core.api import (
 tickets_urls = [
     path("", TicketsAPI.as_view()),
     path("<int:id>/", TicketRetrieveAPI.as_view()),
-    path("<int:id>/assing/", TicketAssingAPI.as_view()),
+    path("<int:id>/assign/", TicketAssignAPI.as_view()),
     path("<int:id>/resolve/", TicketResolveAPI.as_view()),
 ]
 
