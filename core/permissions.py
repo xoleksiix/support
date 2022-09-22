@@ -20,9 +20,21 @@ class OperatorOnly(BasePermission):
         return False
 
 
-class OwnerAndAssignOperatorOnly(BasePermission):
-    message = "Not allowed. Owner or assign operator only."
+class OwnerOnly(BasePermission):
+    def has_permission(self, request, view):
+        ticket_id = view.kwargs.get("ticket_id")
+        ticket: Ticket = Ticket.objects.get(id=ticket_id)
+        user = request.user
 
+        if not (request.user and request.user.is_authenticated):
+            return False
+        if user.role.id == DEFAULT_ROLES["user"] and ticket.client is not None and ticket.client.id == user.id:
+            return True
+
+        return False
+
+
+class AssignOperatorOnly(BasePermission):
     def has_permission(self, request, view):
         ticket_id = view.kwargs.get("ticket_id")
         ticket: Ticket = Ticket.objects.get(id=ticket_id)
@@ -31,8 +43,6 @@ class OwnerAndAssignOperatorOnly(BasePermission):
         if not (request.user and request.user.is_authenticated):
             return False
         if user.role.id == DEFAULT_ROLES["admin"] and ticket.operator is not None and ticket.operator.id == user.id:
-            return True
-        if user.role.id == DEFAULT_ROLES["user"] and ticket.client is not None and ticket.client.id == user.id:
             return True
 
         return False
