@@ -2,8 +2,33 @@
 
 # Support service.
 
+## Web application is powered by:
+- Python 3.10
+- Pipenv
+- Django
+- Django REST framework
 
+## Code quality tools:
+- flake8
+- black
+- isort
+# Run application
+```bash
+# Run docker-compose services
+docker-compose up
+
+# Build the image
+docker build
+
+```
+
+```bash
+ docker build -t support_django . -f Dockerfile
+ docker run -p 8000:80 -v $PWD/:/app/ --rm -it support_django
+```
 ### Setup the environment
+
+
 
 #### Install dependencies with Pipenv & activate virtual environment
 🔗  [Pipenv official page](https://pipenv.pypa.io/)

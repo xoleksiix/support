@@ -70,13 +70,33 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 
 # Database
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "support",
+        "USER": "support",
+        "PASSWORD": "support",
+        "HOST": "postgres",  # postgres from docker-compose
+        "PORT": 5432,
     }
 }
-
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": os.getenv("POSTGRES_DB", default="support"),
+#         "USER": os.getenv("POSTGRES_USER", default="support"),
+#         "PASSWORD": os.getenv("POSTGRES_PASSWORD", default="support"),
+#         "HOST": os.getenv("POSTGRES_HOST", default="postgres"), # postgres from docker-compose
+#         "PORT": int(os.getenv("POSTGRES_PORT", default="5432")),
+#     }
+# }
 
 AUTH_USER_MODEL = "authentication.User"
 
