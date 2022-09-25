@@ -5,8 +5,9 @@
 # Python stuff
 __pycache__/
 
-# Sqlite
+# database
 *.sqlite3
+*.sql
 
 #garbage
 history.json
