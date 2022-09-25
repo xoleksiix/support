@@ -12,20 +12,29 @@
 - flake8
 - black
 - isort
-# Run application
+## Run application with docker-compose
+[Install Docker](https://docs.docker.com/get-docker/)
 ```bash
-# Run docker-compose services
-docker-compose up
-
 # Build the image
 docker build
-
+# Run docker-compose services
+docker-compose up -d
 ```
-
+## Run application with docker
 ```bash
- docker build -t support_django . -f Dockerfile
- docker run -p 8000:80 -v $PWD/:/app/ --rm -it support_django
+# Build the image
+docker build -t support_django . -f Dockerfile
+# Run docker image
+docker run -p 8000:80 -v $PWD/:/app/ --rm -it support_django
 ```
+```bash
+# Dump database
+docker exec -t support_postgres pg_dump -c -U support > dump.sql
+# Restore database
+cat dump.sql | docker exec -i support_postgres psql -U support
+```
+
+## Run application with NO-docker
 ### Setup the environment
 
 
