@@ -1,5 +1,3 @@
-# hillel_05_2022_support
-
 # Support service.
 
 ## Web application is powered by:
